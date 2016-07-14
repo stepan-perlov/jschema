@@ -22,3 +22,8 @@ def mezzo(ctx):
         ctx.run("tar cf jschema.tar.gz jschema")
         ctx.run("mv jschema.tar.gz /opt/mezzo/dependencies")
         ctx.run("rm -rf jschema")
+
+@task
+def tests(ctx):
+    with cd("tests"):
+        ctx.run("python test_jschema.py")
