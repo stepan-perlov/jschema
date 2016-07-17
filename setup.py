@@ -7,12 +7,12 @@ setup(
     name="jschema",
     version=__version__,
     description="json schema tookit",
-    license='MIT',
+    license="MIT",
     author="Stepan Perlov",
     author_email="stepanperlov@gmail.com",
     install_requires=["PyYAML", "jinja2"],
-    packages=["jschema"],
-    package_data={'jschema': ['templates/*.j2']},
-    url='https://github.com/stepan-perlov/jschema',
+    packages=["jschema", "jschema.make"],
+    package_data={"jschema.make": ["templates/*.j2"]},
+    url="https://github.com/stepan-perlov/jschema",
     platforms=["linux"]
 )

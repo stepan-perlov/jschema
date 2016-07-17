@@ -6,33 +6,29 @@ import yaml
 
 from node import Node
 from errors import JrsSchemaError
-
-from make_json import make_json
-from make_js import make_js
-from make_docs import make_docs
-
-MAKE_FORMATS = {
-    "json": make_json,
-    "js": make_js,
-    "docs": make_docs
-}
+import make
 
 
 class Schema(object):
 
-    def __init__(self, root):
-        self._root = root
+    def __init__(self):
         self._schemas = {}
         self._nodes = {}
 
-    def load(self):
-        res = subprocess.check_output(["find", self._root, "-name", "*.yaml"])
+    def load(self, root):
+        res = subprocess.check_output(["find", root, "-name", "*.yaml"])
         for fpath in res.split():
             with io.open(fpath, encoding="utf-8") as fstream:
                 schema = yaml.load(fstream)
-                if "id" not in schema:
-                    raise JrsSchemaError("Attribute 'id' not exists: {}".format(fpath))
-                self._schemas[schema["id"]] = schema
+
+            if "id" not in schema:
+                raise JrsSchemaError(u"Attribute 'id' not exists: {}".format(fpath))
+            if "type" not in schema:
+                raise JrsSchemaError(u"Attribute 'type' not exists: {}".format(fpath))
+            if schema["type"] == "method" and "params" not in schema:
+                raise JrsSchemaError(u"Attribute 'params' not exists in method: {}".format(fpath))
+
+            self._schemas[schema["id"]] = schema
 
     def resolve_refs(self):
         Node.set_schemas(self._schemas)
@@ -47,4 +43,8 @@ class Schema(object):
             Node.clear(schema)
 
     def make(self, make_format, options):
-        MAKE_FORMATS[make_format](self._schemas, options)
+        make_proc = getattr(make, make_format, None)
+        if make_proc is None:
+            raise JrsSchemaError("Unexpected make format '{}'".format(make_format))
+        else:
+            make_proc(self._schemas, options)

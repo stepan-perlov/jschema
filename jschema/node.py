@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from copy import deepcopy
 from errors import JrsNodeError
 
 
 class Node(object):
 
     _schemas = {}
+
     @classmethod
     def set_schemas(cls, schemas):
         cls._schemas = schemas
@@ -56,7 +56,7 @@ class Node(object):
             })
         else:
             schemaId, path = ref.split("#")
-            if not schemaId in self._schemas:
+            if schemaId not in self._schemas:
                 raise JrsNodeError(u"Schema not exists", self)
             self._root._refs.append({
                 "node": self,

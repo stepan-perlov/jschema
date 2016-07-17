@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+TODO: refactoring
 import os
 import io
 
 from jinja2 import Environment, FileSystemLoader
 
-from errors import JrsMakeError
+from jschema.errors import JrsMakeError
 
 MODULE_DIR = os.path.abspath(os.path.dirname(__file__))
 DEFAULT_INDEX_PATH = os.path.join(MODULE_DIR, "templates/docs_index.j2")
@@ -54,3 +56,4 @@ def make_docs(schemas, options):
     for sch in schemas.itervalues():
         with io.open(os.path.join(SCHEMAS_DIR, sch["id"] + ".md"), "w", encoding="utf-8") as fstream:
             fstream.write(docs_schema.render({"schema": sch}))
+"""
