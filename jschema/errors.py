@@ -11,11 +11,12 @@ class JrsSchemaError(JrsError):
 
 
 class JrsNodeError(JrsError):
-    def __init__(self, message, node):
-        self.value = u"{}. node: {}, schema_id: {}".format(
+    @staticmethod
+    def make_message(message, node):
+        return u"{}. node: {}, schema_id: {}".format(
             message,
-            unicode(json.dumps(node.parent, indent=2, separators=(',', ': '))),
-            node.root["id"]
+            unicode(json.dumps(node.parent.value, indent=2, separators=(',', ': '))),
+            node.root.key
         )
 
 class JrsMakeError(JrsError):

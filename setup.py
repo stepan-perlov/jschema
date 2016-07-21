@@ -11,7 +11,7 @@ setup(
     author="Stepan Perlov",
     author_email="stepanperlov@gmail.com",
     install_requires=["PyYAML", "jinja2"],
-    packages=["jschema", "jschema.make"],
+    packages=["jschema", "jschema.make", "jschema.node"],
     package_data={"jschema.make": ["templates/*.j2"]},
     url="https://github.com/stepan-perlov/jschema",
     platforms=["linux"]

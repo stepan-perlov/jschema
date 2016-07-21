@@ -1,10 +1,15 @@
+# -*- coding: utf-8 -*-
 
 
-def dump_methods(schemas):
+def dump_methods(schema):
     tree = {}
-    for key, sch in schemas.iteritems():
+    for key, sch in schema.schemas.iteritems():
         if sch["type"] == "method":
-            ns, method = key.split(".")
+            if "." in key:
+                ns, method = key.split(".")
+            else:
+                ns = "default"
+                method = key
             if ns not in tree:
                 tree[ns] = {}
             tree[ns][method] = {}

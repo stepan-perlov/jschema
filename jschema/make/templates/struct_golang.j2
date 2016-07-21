@@ -1,0 +1,22 @@
+{% macro struct(name, schema) %}
+type {{name}} struct {
+{% for key, value in schema.properties.iteritems() %}
+  {% if value.type == "array" and value.items.pointer_to %}
+  {{key | upperCamelCase}} []*{{value.items.pointer_to | upperCamelCase}}
+  {% elif value.pointer_to %}
+  {{key | upperCamelCase}} *{{value.pointer_to | upperCamelCase}}
+  {%  else %}
+  {{key | upperCamelCase}} {{value.type | golangType(value.items)}}
+  {% endif %}
+{% endfor %}
+}
+{% endmacro %}
+package {{ns}}
+
+{% if schema.type == "method" %}
+{{struct(name | upperCamelCase + "Params", schema.params)}}
+{{struct(name | upperCamelCase + "Result", schema.result)}}
+var {{name | upperCamelCase}}ParamsSchema string = `{{schema.origin.params | jsonDumps}}`
+{% else %}
+{{struct(name | upperCamelCase, schema)}}
+{%- endif -%}

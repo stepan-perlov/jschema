@@ -1,0 +1,7 @@
+package {{ns}}
+
+{% from "_struct_macro.j2" import struct %}
+{{struct(name | upperCamelCase + "Params", schema.params)}}
+{{struct(name | upperCamelCase + "Result", schema.result)}}
+var {{name | upperCamelCase}}ParamsSchema string = `{{schema.origin.params | jsonDumps}}`
+

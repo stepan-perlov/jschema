@@ -1,5 +1,5 @@
 {% for ns in schemas %}
     {% for method, schema in schemas[ns].iteritems() %}
-ajv.addSchema({{schema.params | json_dumps}}, "{{ns}}.{{method}}")
+ajv.addSchema({{schema.params | jsonDumps}}, "{{ns}}.{{method}}")
     {% endfor %}
 {% endfor %}

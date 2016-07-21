@@ -1,0 +1,16 @@
+id: add_news
+type: method
+
+params:
+  type: object
+  properties:
+    id:
+      type: integer
+    active:
+      type: boolean
+    article:
+      $ref: article#
+
+result:
+  type: object
+  properties: {}

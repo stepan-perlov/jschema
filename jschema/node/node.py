@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-from errors import JrsNodeError
+from jschema.errors import JrsNodeError
 
 
 class Node(object):
-
-    _schemas = {}
 
     @classmethod
     def set_schemas(cls, schemas):
@@ -23,31 +21,46 @@ class Node(object):
             for value in schema:
                 Node.clear(value)
 
-    def __init__(self, key, parent=None, root=None):
+    def __init__(self, key, parent, root):
         self._key = key
-        self._parent = parent or Node._schemas
-        self._root = root or self
+        self._parent = parent
+        self._root = root
         self._childs = []
-        self._refs = []
+
+    @property
+    def key(self):
+        return self._key
 
     @property
     def parent(self):
         return self._parent
 
     @property
+    def root(self):
+        return self._root
+
+    def path(self, path=[]):
+        if self._parent:
+            path.append(self._key)
+            return self._parent.path(path)
+        else:
+            return reversed(path)
+
+    @property
     def value(self):
-        return self._parent[self._key]
+        return self._parent.value[self._key]
 
     @value.setter
     def value(self, new_value):
-        self._parent[self._key] = new_value
+        self._parent.value[self._key] = new_value
 
     def _store_ref(self):
         ref = self.value["$ref"]
 
         if ref.index("#") == 0:
-            self._root._refs.append({
+            self._root.add_ref({
                 "node": self,
+                "type": "local",
                 "ref": {
                     "path": ref[1:],
                     "context": self._root.value,
@@ -56,13 +69,15 @@ class Node(object):
             })
         else:
             schemaId, path = ref.split("#")
-            if schemaId not in self._schemas:
-                raise JrsNodeError(u"Schema not exists", self)
-            self._root._refs.append({
+            if schemaId not in self._root._schemas:
+                raise JrsNodeError(JrsNodeError.make_message(u"Schema '{}' not exists".format(schemaId), self))
+            self._root.add_ref({
                 "node": self,
+                "type": "global",
                 "ref": {
+                    "id": schemaId,
                     "path": path,
-                    "context": Node._schemas[schemaId],
+                    "context": self._root._schemas[schemaId],
                     "resolved_ref": ref
                 }
             })
@@ -77,12 +92,12 @@ class Node(object):
             self._store_ref()
         elif is_dict:
             self._childs = [
-                Node(key, parent=self.value, root=self._root)
+                Node(key, parent=self, root=self._root)
                 for key in self.value
             ]
         elif is_list:
             self._childs = [
-                Node(index, parent=self.value, root=self._root)
+                Node(index, parent=self, root=self._root)
                 for index in range(len(self.value))
             ]
 
@@ -101,6 +116,6 @@ class Node(object):
                     if key in value:
                         value = value[key]
                     else:
-                        raise JrsNodeError(u"Can't resolve ref path", node)
+                        raise JrsNodeError(JrsNodeError.make_message(u"Can't resolve ref path", node))
 
             node.value = value

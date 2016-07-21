@@ -1,0 +1,14 @@
+id: article
+type: object
+
+properties:
+  title:
+    type: string
+  preview:
+    type: string
+  content:
+    type: string
+
+result:
+  type: object
+  properties: {}

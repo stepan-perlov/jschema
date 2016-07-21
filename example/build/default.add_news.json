@@ -1,0 +1,35 @@
+{
+  "type": "method",
+  "params": {
+    "type": "object",
+    "properties": {
+      "active": {
+        "type": "boolean"
+      },
+      "article": {
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "preview": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "result": {
+          "type": "object",
+          "properties": {}
+        },
+        "id": "article"
+      },
+      "id": {
+        "type": "integer"
+      }
+    }
+  },
+  "id": "add_news",
+  "result": {
+    "type": "object",
+    "properties": {}
+  }
+}
