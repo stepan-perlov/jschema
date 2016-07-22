@@ -2,11 +2,11 @@
 type {{name}} struct {
 {% for key, value in schema.properties.iteritems() %}
   {% if value.type == "array" and value.items.pointer_to %}
-  {{key | upperCamelCase}} []*{{value.items.pointer_to | upperCamelCase}}
+  {{key | upperCamelCase}} []*{{value.items.pointer_to | upperCamelCase}} `json:"{{key}}"`
   {% elif value.pointer_to %}
-  {{key | upperCamelCase}} *{{value.pointer_to | upperCamelCase}}
+  {{key | upperCamelCase}} *{{value.pointer_to | upperCamelCase}} `json:"{{key}}"`
   {%  else %}
-  {{key | upperCamelCase}} {{value.type | golangType(value.items)}}
+  {{key | upperCamelCase}} {{value.type | golangType(value.items)}} `json:"{{key}}"`
   {% endif %}
 {% endfor %}
 }
