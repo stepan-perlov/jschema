@@ -20,7 +20,7 @@ class Options(object):
             self._dst_path = self._options["dst_path"]
             dst_dir = os.path.dirname(self._dst_path)
             if not os.path.exists(dst_dir):
-                os.path.makedirs(dst_dir)
+                os.makedirs(dst_dir)
 
         return self._dst_path
 
@@ -32,7 +32,7 @@ class Options(object):
 
             dst_dir = self._dst_dir = self._options["dst_dir"]
             if not os.path.exists(dst_dir):
-                os.path.makedirs(dst_dir)
+                os.makedirs(dst_dir)
 
         return self._dst_dir
 

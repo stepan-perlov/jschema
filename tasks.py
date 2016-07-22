@@ -19,7 +19,7 @@ def mezzo(ctx):
     ctx.run("mkdir -p build/jschema")
     ctx.run("cp -R jschema setup.py build/jschema")
     with cd("build"):
-        ctx.run("tar cf jschema.tar.gz jschema")
+        ctx.run("tar cfz jschema.tar.gz jschema")
         ctx.run("mv jschema.tar.gz /opt/mezzo/dependencies")
         ctx.run("rm -rf jschema")
 
