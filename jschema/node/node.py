@@ -21,11 +21,13 @@ class Node(object):
             for value in schema:
                 Node.clear(value)
 
-    def __init__(self, key, parent, root):
+    def __init__(self, key, parent, root, path):
         self._key = key
         self._parent = parent
         self._root = root
         self._childs = []
+        self._path = path[:]
+        self._path.append(key)
 
     @property
     def key(self):
@@ -39,12 +41,9 @@ class Node(object):
     def root(self):
         return self._root
 
-    def path(self, path=[]):
-        if self._parent:
-            path.append(self._key)
-            return self._parent.path(path)
-        else:
-            return reversed(path)
+    @property
+    def path(self):
+        return self._path
 
     @property
     def value(self):
@@ -61,11 +60,9 @@ class Node(object):
             self._root.add_ref({
                 "node": self,
                 "type": "local",
-                "ref": {
-                    "path": ref[1:],
-                    "context": self._root.value,
-                    "resolved_ref": ref
-                }
+                "path": ref[1:],
+                "context": self._root.value,
+                "value": ref,
             })
         else:
             schemaId, path = ref.split("#")
@@ -74,12 +71,9 @@ class Node(object):
             self._root.add_ref({
                 "node": self,
                 "type": "global",
-                "ref": {
-                    "id": schemaId,
-                    "path": path,
-                    "context": self._root._schemas[schemaId],
-                    "resolved_ref": ref
-                }
+                "path": path,
+                "context": self._root._schemas[schemaId],
+                "value": ref
             })
 
     def find_refs(self):
@@ -92,12 +86,12 @@ class Node(object):
             self._store_ref()
         elif is_dict:
             self._childs = [
-                Node(key, parent=self, root=self._root)
+                Node(key, parent=self, root=self._root, path=self._path)
                 for key in self.value
             ]
         elif is_list:
             self._childs = [
-                Node(index, parent=self, root=self._root)
+                Node(index, parent=self, root=self._root, path=self._path)
                 for index in range(len(self.value))
             ]
 
@@ -108,11 +102,10 @@ class Node(object):
     def replace_refs(self):
         for item in self._refs:
             node = item["node"]
-            ref = item["ref"]
 
-            value = ref["context"]
-            if ref["path"]:
-                for key in ref["path"].strip("/").split("/"):
+            value = item["context"]
+            if item["path"]:
+                for key in item["path"].strip("/").split("/"):
                     if key in value:
                         value = value[key]
                     else:

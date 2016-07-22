@@ -19,6 +19,10 @@ class Schema(object):
     def schemas(self):
         return self._schemas
 
+    @property
+    def nodes(self):
+        return self._nodes
+
     def load(self, root):
         res = subprocess.check_output(["find", root, "-name", "*.yaml"])
         for fpath in res.split():

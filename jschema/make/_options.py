@@ -10,14 +10,17 @@ class Options(object):
         self._dst_path = None
         self._dst_dir = None
         self._ns = None
+        self._import_root = None
+
+    def _get_param(self, key):
+        if key not in self._options:
+            raise JrsMakeError("options['{}'] not exists".format(key))
+        return self._options[key]
 
     @property
     def dst_path(self):
         if self._dst_path is None:
-            if "dst_path" not in self._options:
-                raise JrsMakeError("options['dst_path'] not exists")
-
-            self._dst_path = self._options["dst_path"]
+            self._dst_path = self._get_param("dst_path")
             dst_dir = os.path.dirname(self._dst_path)
             if not os.path.exists(dst_dir):
                 os.makedirs(dst_dir)
@@ -27,10 +30,7 @@ class Options(object):
     @property
     def dst_dir(self):
         if self._dst_dir is None:
-            if "dst_dir" not in self._options:
-                raise JrsMakeError("options['dst_dir'] not exists")
-
-            dst_dir = self._dst_dir = self._options["dst_dir"]
+            dst_dir = self._dst_dir = self._get_param("dst_dir")
             if not os.path.exists(dst_dir):
                 os.makedirs(dst_dir)
 
@@ -39,9 +39,13 @@ class Options(object):
     @property
     def ns(self):
         if self._ns is None:
-            if "ns" not in self._options:
-                raise JrsMakeError("options['ns'] not exists")
-
-            self._ns = self._options["ns"]
+            self._ns = self._get_param("ns")
 
         return self._ns
+
+    @property
+    def import_root(self):
+        if self._import_root is None:
+            self._import_root = self._get_param("import_root")
+
+        return self._import_root
