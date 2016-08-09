@@ -97,5 +97,6 @@ class GolangMaker(object):
                     "deps": self._deps[sch_id],
                     "ns": ns,
                     "name": name,
-                    "schema": sch
+                    "schema": sch,
+                    "import_root": self._opts.import_root
                 }))

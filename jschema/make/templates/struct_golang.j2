@@ -1,5 +1,6 @@
 {% macro struct(name, schema) %}
 type {{name}} struct {
+{% if schema.properties %}
 {% for key, value in schema.properties.iteritems() %}
   {% if value.get("type") == "array" and value.get("items").pointer %}
   {{key | upperCamelCase}} []*{{value.get("items").pointer}} `json:"{{key}}"`
@@ -9,6 +10,7 @@ type {{name}} struct {
   {{key | upperCamelCase}} {{value | golangType}} `json:"{{key}}"`
   {% endif %}
 {% endfor %}
+{% endif %}
 }
 {% endmacro %}
 package {{ns}}
@@ -16,7 +18,7 @@ package {{ns}}
 {% if deps %}
 import (
 {% for package in deps %}
-    "{{package}}"
+    "{{import_root}}/{{package}}"
 {% endfor %}
 )
 {% endif %}
