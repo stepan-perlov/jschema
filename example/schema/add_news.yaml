@@ -6,10 +6,18 @@ params:
   properties:
     id:
       type: integer
+    language:
+      enum:
+        - ru
+        - en
     active:
       type: boolean
     article:
+      type: ["object", "null"]
       $ref: article#
+    tags:
+      type: ["array", "null", "text"]
+
 
 result:
   type: object

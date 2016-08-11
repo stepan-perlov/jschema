@@ -15,6 +15,6 @@ schema.load(SCHEMA_DIR)
 schema.resolve_refs()
 schema.clear()
 
-schema.make("golang", {"dst_dir": BUILD_DIR, "ns": "build"})
+schema.make("golang", {"dst_dir": BUILD_DIR, "ns": "build", "import_root": "."})
 schema.make("ajv", {"dst_path": os.path.join(BUILD_DIR, "schema-ajv.js")})
 schema.make("json", {"dst_dir": BUILD_DIR})

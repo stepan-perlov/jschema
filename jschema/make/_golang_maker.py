@@ -4,6 +4,7 @@ from collections import defaultdict
 
 from jschema.errors import JrsMakeError
 from jschema.make._filters import upper_camel_case_filter
+from jschema.make._filters import golang_type_filter
 from jschema.make._jinja2_env import jinja2_env
 
 
@@ -67,7 +68,7 @@ class GolangMaker(object):
 
                 ns, name, split_length = self._split_id(ref_schema["id"])
                 pointer = upper_camel_case_filter(name) + suffix
-                if ns != node.ns:
+                if split_length == 2 and ns != node.ns:
                     pointer = ns + "." + pointer
                     self._append_dep(target_schema["id"], ns)
 
@@ -79,6 +80,36 @@ class GolangMaker(object):
                 sch_copy = deepcopy(sch)
                 sch_copy["origin"] = sch
                 self._structs[sch["id"]] = sch_copy
+
+    def _prepare_item(self, item):
+        max_name = max_type = 0
+
+        for key, value in item.get("properties", {}).iteritems():
+            value["golang_name"] = upper_camel_case_filter(key)
+
+            if value.get("type", None) == "array" and "pointer" in value.get("items", {}):
+                value["golang_type"] = "[]*" + value["items"]["pointer"]
+            elif "pointer" in value:
+                value["golang_type"] = "*" + value["pointer"]
+            else:
+                value["golang_type"] = golang_type_filter(value)
+
+            max_name = max(max_name, len(value["golang_name"]))
+            max_type = max(max_type, len(value["golang_type"]))
+
+        item["max_name"] = max_name
+        item["max_type"] = max_type
+
+
+    def prepare_structs(self):
+        for sch_id, sch in self._structs.iteritems():
+            if sch["type"] == "method":
+                if "params" in sch:
+                    self._prepare_item(sch["params"])
+                if "result" in sch:
+                    self._prepare_item(sch["result"])
+            else:
+                self._prepare_item(sch)
 
     def save_structs(self):
         struct_j2 = jinja2_env.get_template("struct_golang.j2")

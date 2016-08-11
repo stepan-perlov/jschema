@@ -1,6 +1,7 @@
 package build
 
 type Article struct {
-  Content string
-  Preview string
+    Content string `json:"content"`
+    Preview string `json:"preview"`
+    Title   string `json:"title"`
 }

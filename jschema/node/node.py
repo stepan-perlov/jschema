@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from copy import deepcopy
 from jschema.errors import JrsNodeError
 
 
@@ -9,17 +10,20 @@ class Node(object):
         cls._schemas = schemas
 
     @staticmethod
-    def clear(schema):
+    def clear(schema, parent_key=None):
+        if parent_key == "properties":
+            return
+
         value_type = type(schema)
         if value_type == dict:
             schema.pop("title", None)
             schema.pop("description", None)
 
-            for value in schema.values():
-                Node.clear(value)
+            for key, value in schema.iteritems():
+                Node.clear(value, key)
         elif value_type == list:
-            for value in schema:
-                Node.clear(value)
+            for i, value in enumerate(schema):
+                Node.clear(value, i)
 
     def __init__(self, key, parent, root, path):
         self._key = key
@@ -62,6 +66,7 @@ class Node(object):
                 "type": "local",
                 "path": ref[1:],
                 "context": self._root.value,
+                "origin_value": deepcopy(self.value),
                 "value": ref,
             })
         else:
@@ -73,6 +78,7 @@ class Node(object):
                 "type": "global",
                 "path": path,
                 "context": self._root._schemas[schemaId],
+                "origin_value": deepcopy(self.value),
                 "value": ref
             })
 
@@ -112,3 +118,14 @@ class Node(object):
                         raise JrsNodeError(JrsNodeError.make_message(u"Can't resolve ref path", node))
 
             node.value = value
+
+        for item in self._refs:
+            node = item["node"]
+            node_value = deepcopy(node.value)
+
+            for key, value in item["origin_value"].iteritems():
+                if key == "$ref":
+                    continue
+                node_value[key] = value
+
+            node.value = node_value

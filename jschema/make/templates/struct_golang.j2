@@ -2,13 +2,7 @@
 type {{name}} struct {
 {% if schema.properties %}
 {% for key, value in schema.properties.iteritems() %}
-  {% if value.get("type") == "array" and value.get("items").pointer %}
-  {{key | upperCamelCase}} []*{{value.get("items").pointer}} `json:"{{key}}"`
-  {% elif value.pointer %}
-  {{key | upperCamelCase}} *{{value.pointer}} `json:"{{key}}"`
-  {%  else %}
-  {{key | upperCamelCase}} {{value | golangType}} `json:"{{key}}"`
-  {% endif %}
+    {{value.golang_name | ljust(schema.max_name)}} {{value.golang_type | ljust(schema.max_type)}} `json:"{{key}}"`
 {% endfor %}
 {% endif %}
 }

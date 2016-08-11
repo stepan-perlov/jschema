@@ -1,9 +1,11 @@
 package build
 
 type AddNewsParams struct {
-  Active bool
-  Article *Article
-  Id int
+    Active   bool        `json:"active"`
+    Article  *Article    `json:"article"`
+    Id       int         `json:"id"`
+    Language string      `json:"language"`
+    Tags     interface{} `json:"tags"`
 }
 
 type AddNewsResult struct {
@@ -16,23 +18,42 @@ var AddNewsParamsSchema string = `{
       "type": "boolean"
     },
     "article": {
+      "id": "article",
+      "type": [
+        "object",
+        "null"
+      ],
       "properties": {
         "content": {
           "type": "string"
         },
         "preview": {
           "type": "string"
+        },
+        "title": {
+          "type": "string"
         }
       },
-      "type": "object",
       "result": {
         "type": "object",
         "properties": {}
-      },
-      "id": "article"
+      }
     },
     "id": {
       "type": "integer"
+    },
+    "language": {
+      "enum": [
+        "ru",
+        "en"
+      ]
+    },
+    "tags": {
+      "type": [
+        "array",
+        "null",
+        "text"
+      ]
     }
   }
 }`

@@ -22,3 +22,4 @@ jinja2_env.filters["intersectionValue"] = intersection_value_filter
 jinja2_env.filters["jsonDumps"] = json_dumps_filter
 jinja2_env.filters["upperCamelCase"] = upper_camel_case_filter
 jinja2_env.filters["golangType"] = golang_type_filter
+jinja2_env.filters["ljust"] = lambda value, size: value.ljust(size)

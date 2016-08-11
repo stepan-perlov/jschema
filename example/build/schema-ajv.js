@@ -5,23 +5,42 @@ ajv.addSchema({
       "type": "boolean"
     },
     "article": {
+      "id": "article",
+      "type": [
+        "object",
+        "null"
+      ],
       "properties": {
         "content": {
           "type": "string"
         },
         "preview": {
           "type": "string"
+        },
+        "title": {
+          "type": "string"
         }
       },
-      "type": "object",
       "result": {
         "type": "object",
         "properties": {}
-      },
-      "id": "article"
+      }
     },
     "id": {
       "type": "integer"
+    },
+    "language": {
+      "enum": [
+        "ru",
+        "en"
+      ]
+    },
+    "tags": {
+      "type": [
+        "array",
+        "null",
+        "text"
+      ]
     }
   }
-}, "default.add_news")
+}, "default.add_news");
