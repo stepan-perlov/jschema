@@ -1,0 +1,15 @@
+__jschema__()
+{
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    local prev=${COMP_WORDS[COMP_CWORD - 1]}
+
+    case "$prev" in
+        "jschema")
+            COMPREPLY=( $(compgen -W "make-ajv make-golang make-js make-json" -- $cur) )
+            ;;
+        *)
+            COMPREPLY=( $(compgen -W "dst_path: dst_dir: ns: import_root:" -- $cur) )
+            ;;
+    esac
+}
+complete -F __jschema__ jschema

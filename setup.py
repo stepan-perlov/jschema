@@ -14,5 +14,9 @@ setup(
     packages=["jschema", "jschema.make", "jschema.node"],
     package_data={"jschema.make": ["templates/*.j2"]},
     url="https://github.com/stepan-perlov/jschema",
-    platforms=["linux"]
+    platforms=["linux"],
+    data_files=[
+        ("/etc/bash_completion.d", ["bash_completion.d/jschema"]),
+        ("/usr/local/bin", ["bin/jschema"])
+    ],
 )
