@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import io
 import subprocess
 
@@ -12,8 +13,13 @@ import make
 class Schema(object):
 
     def __init__(self):
+        self._schemas_dirs = {}
         self._schemas = {}
         self._nodes = {}
+
+    @property
+    def schemas_dirs(self):
+        return self._schemas_dirs
 
     @property
     def schemas(self):
@@ -37,6 +43,7 @@ class Schema(object):
                 raise JrsSchemaError(u"Attribute 'params' not exists in method: {}".format(fpath))
 
             self._schemas[schema["id"]] = schema
+            self._schemas_dirs[schema["id"]] = os.path.dirname(fpath).replace(root, "", 1).lstrip("/")
 
     def resolve_refs(self):
         RootNode.set_schemas(self._schemas)

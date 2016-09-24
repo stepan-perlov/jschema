@@ -10,13 +10,14 @@ setup(
     license="MIT",
     author="Stepan Perlov",
     author_email="stepanperlov@gmail.com",
+    url="https://github.com/stepan-perlov/jschema",
     install_requires=["PyYAML", "jinja2"],
     packages=["jschema", "jschema.make", "jschema.node"],
     package_data={"jschema.make": ["templates/*.j2"]},
-    url="https://github.com/stepan-perlov/jschema",
-    platforms=["linux"],
+    scripts=["bin/jschema"],
     data_files=[
         ("/etc/bash_completion.d", ["bash_completion.d/jschema"]),
         ("/usr/local/bin", ["bin/jschema"])
     ],
+    platforms=["linux"],
 )

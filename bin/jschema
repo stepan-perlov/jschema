@@ -15,7 +15,6 @@ Options:
   dst_path:<dst_path>
   dst_dir:<dst_dir>
   ns:<ns>
-  import_root:<import_root>
 
 HelpMessage
 
