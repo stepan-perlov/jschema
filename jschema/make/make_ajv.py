@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import io
+import os
 
 from jschema.make._options import Options
 from jschema.make._dump_methods import dump_methods
@@ -10,5 +10,19 @@ def make_ajv(schema, options):
     opts = Options(options)
     template = jinja2_env.get_template("schema_ajv.j2")
 
-    with io.open(opts.dst_path, "w", encoding="utf-8") as fstream:
-        fstream.write(template.render({"schemas": dump_methods(schema)}))
+    for key, sch in schema.schemas.iteritems():
+        if sch["type"] != "method":
+            continue
+
+        dst_dir = os.path.join(opts.dst_dir, schema.schemas_dirs[key])
+        if not os.path.exists(dst_dir):
+            os.makedirs(dst_dir)
+
+        key_split = key.split(".")
+        name = key_split[0]
+
+        file_path = "{}/{}.js".format(dst_dir, name)
+        with open(file_path, "w") as fstream:
+            fstream.write(template.render({
+                "schema": sch
+            }))

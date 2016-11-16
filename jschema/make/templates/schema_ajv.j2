@@ -1,5 +1,1 @@
-{% for ns in schemas %}
-    {% for method, schema in schemas[ns].iteritems() %}
-ajv.addSchema({{schema.params | jsonDumps}}, "{{ns}}.{{method}}");
-    {% endfor %}
-{% endfor %}
+ajv.addSchema({{schema.params | jsonDumps}}, "{{schema.id}}");

@@ -7,7 +7,6 @@ class Options(object):
 
     def __init__(self, options):
         self._options = options
-        self._dst_path = None
         self._dst_dir = None
         self._ns = None
         self._import_root = None
@@ -16,16 +15,6 @@ class Options(object):
         if key not in self._options:
             raise JrsMakeError("options['{}'] not exists".format(key))
         return self._options[key]
-
-    @property
-    def dst_path(self):
-        if self._dst_path is None:
-            self._dst_path = self._get_param("dst_path")
-            dst_dir = os.path.dirname(self._dst_path)
-            if not os.path.exists(dst_dir):
-                os.makedirs(dst_dir)
-
-        return self._dst_path
 
     @property
     def dst_dir(self):

@@ -12,7 +12,6 @@ Commands:
   make-json
 
 Options:
-  dst_path:<dst_path>
   dst_dir:<dst_dir>
   ns:<ns>
 

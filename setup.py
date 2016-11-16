@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from setuptools import setup
-from jschema import __version__
+import sys
+sys.path.insert(0, "jschema")
+from version import __version__
 
 setup(
     name="jschema",

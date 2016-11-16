@@ -8,7 +8,7 @@ __jschema__()
             COMPREPLY=( $(compgen -W "make-ajv make-golang make-js make-json" -- $cur) )
             ;;
         *)
-            COMPREPLY=( $(compgen -W "dst_path: dst_dir: ns:" -- $cur) )
+            COMPREPLY=( $(compgen -W "dst_dir: ns:" -- $cur) )
             ;;
     esac
 }
