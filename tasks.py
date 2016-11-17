@@ -1,13 +1,16 @@
 from invoke import task
 from invoke.util import cd
-import jschema
+import sys
+sys.path.insert(0, "jschema")
+
+from version import __version__
 
 
 @task
 def pip(ctx):
     ctx.run("rm -rf dist jschema.egg-info")
     ctx.run("./setup.py sdist")
-    ctx.run("twine upload dist/jschema-{}.tar.gz".format(jschema.__version__))
+    ctx.run("twine upload dist/jschema-{}.tar.gz".format(__version__))
 
 @task
 def doc(ctx):

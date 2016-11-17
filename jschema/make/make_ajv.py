@@ -19,10 +19,16 @@ def make_ajv(schema, options):
             os.makedirs(dst_dir)
 
         key_split = key.split(".")
-        name = key_split[0]
+        if len(key_split) == 1:
+            name = key_split[0]
+        elif len(key_split) == 2:
+            name = key_split[1]
+        else:
+            raise JrsMakeError("Expect zero or one dot in schema id")
 
         file_path = "{}/{}.js".format(dst_dir, name)
         with open(file_path, "w") as fstream:
             fstream.write(template.render({
                 "schema": sch
             }))
+        print(" - Created: {}".format(file_path))
