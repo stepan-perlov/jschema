@@ -28,9 +28,12 @@ def make_golang(schema, options):
         if not os.path.exists(sch_dir):
             os.makedirs(sch_dir)
 
-        sch_path = "{}/{}_meta.go".format(sch_dir, name)
+        package = schema.schemas_dirs[key].rsplit("/", 1)[-1]
+
+        sch_path = "{}/{}_meta.go".format(sch_dir, key.replace(".", "_"))
         with open(sch_path, "w") as fstream:
             fstream.write(template.render({
+                "package": package,
                 "ns": ns,
                 "name": name,
                 "schema": sch

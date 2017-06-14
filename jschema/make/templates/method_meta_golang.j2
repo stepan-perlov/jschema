@@ -1,5 +1,5 @@
-package {{ns}}
+package {{package}}
 
-const {{name | upperCamelCase}}Name = `{{schema.id}}`
-const {{name | upperCamelCase}}ParamsSchema string = `{{schema.params | jsonDumps}}`
+const {{ns | camelCase}}{{name | upperCamelCase}}Name = `{{schema.id}}`
+const {{ns | camelCase}}{{name | upperCamelCase}}ParamsSchema string = `{{schema.params | jsonDumps}}`
 
