@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
-from jschema.errors import JrsMakeError
-from jschema.make._options import Options
-from jschema.make._dump_methods import dump_methods
-from jschema.make._jinja2_env import jinja2_env
+from ..errors import JrsFormatingError
+from ._options import Options
+from ._dump_methods import dump_methods
+from ._jinja2_env import jinja2_env
 
 
-def make_golang(schema, options):
+def format_golang(schema, options):
     opts = Options(options)
     template = jinja2_env.get_template("method_meta_golang.j2")
 
@@ -22,7 +22,7 @@ def make_golang(schema, options):
             ns = key_split[0]
             name = key_split[1]
         else:
-            raise JrsMakeError("Expect zero or one dot in schema id")
+            raise JrsFormatingError("Expect zero or one dot in schema id")
 
         sch_dir = os.path.join(opts.dst_dir, schema.schemas_dirs[key])
         if not os.path.exists(sch_dir):

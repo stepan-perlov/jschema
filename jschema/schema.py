@@ -5,9 +5,9 @@ import subprocess
 
 import yaml
 
-from node import RootNode
-from errors import JrsSchemaError
-import make
+from .node import RootNode
+from .errors import JrsSchemaError
+from .formats import formats
 
 
 class Schema(object):
@@ -57,9 +57,8 @@ class Schema(object):
         for schema in self._schemas.values():
             RootNode.clear(schema)
 
-    def make(self, make_format, options):
-        make_proc = getattr(make, make_format, None)
-        if make_proc is None:
+    def format(self, fmt, options):
+        if fmt not in formats:
             raise JrsSchemaError("Unexpected make format '{}'".format(make_format))
         else:
-            make_proc(self, options)
+            formats[fmt](self, options)

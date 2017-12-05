@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from copy import deepcopy
-from jschema.errors import JrsNodeError
+from ..errors import JrsNodeError
 
 
 class Node(object):
