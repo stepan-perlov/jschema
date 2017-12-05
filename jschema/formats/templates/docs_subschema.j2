@@ -16,12 +16,12 @@
     {% endif %}
 >|Name|Type|Description|
 >|-|-|-|
-    {% for key, value in subschema.properties.iteritems() %}
+    {% for key, value in subschema.properties.items() %}
 >|{{key}}|{{value.type or (value.enum and "enum")}}|{{value.description}}|
     {% endfor %}
 {% elif subschema.type == "array" %}
     {% if subschema["items"].properties %}
-        {% for key, value in subschema["items"].properties.iteritems() %}
+        {% for key, value in subschema["items"].properties.items() %}
             {% if value["resolved_ref"] %}
 >|{{key}}|$ref:{{value["resolved_ref"]}}||
             {% else %}

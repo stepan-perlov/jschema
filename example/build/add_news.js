@@ -1,17 +1,4 @@
-package build
-
-type AddNewsParams struct {
-    Active   bool        `json:"active"`
-    Article  *Article    `json:"article"`
-    Id       int         `json:"id"`
-    Language string      `json:"language"`
-    Tags     interface{} `json:"tags"`
-}
-
-type AddNewsResult struct {
-}
-
-var AddNewsParamsSchema string = `{
+ajv.addSchema({
   "type": "object",
   "properties": {
     "active": {
@@ -52,8 +39,8 @@ var AddNewsParamsSchema string = `{
       "type": [
         "array",
         "null",
-        "text"
+        "string"
       ]
     }
   }
-}`
+}, "add_news");

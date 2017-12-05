@@ -1,0 +1,12 @@
+id: content.add_file
+type: method
+
+params:
+  type: object
+  properties:
+    path:
+      type: string
+
+result:
+  type: object
+  properties: {}

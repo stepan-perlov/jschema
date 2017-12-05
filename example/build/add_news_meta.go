@@ -1,4 +1,7 @@
-ajv.addSchema({
+package build
+
+const buildAddNewsName = `add_news`
+const buildAddNewsParamsSchema string = `{
   "type": "object",
   "properties": {
     "active": {
@@ -39,8 +42,8 @@ ajv.addSchema({
       "type": [
         "array",
         "null",
-        "text"
+        "string"
       ]
     }
   }
-}, "default.add_news");
+}`

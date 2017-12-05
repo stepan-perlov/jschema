@@ -3,7 +3,7 @@
 
 def dump_methods(schema):
     tree = {}
-    for key, sch in schema.schemas.iteritems():
+    for key, sch in schema.schemas.items():
         if sch["type"] == "method":
             if "." in key:
                 ns, method = key.split(".")

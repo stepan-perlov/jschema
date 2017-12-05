@@ -19,5 +19,5 @@ class JrsNodeError(JrsError):
             node.root.key
         )
 
-class JrsMakeError(JrsError):
+class JrsFormatingError(JrsError):
     pass
