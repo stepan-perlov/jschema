@@ -1,0 +1,16 @@
+{
+  "type": "method",
+  "params": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string"
+      }
+    }
+  },
+  "id": "content.add_file",
+  "result": {
+    "type": "object",
+    "properties": {}
+  }
+}

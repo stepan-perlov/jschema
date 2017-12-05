@@ -41,7 +41,7 @@
         "type": [
           "array",
           "null",
-          "text"
+          "string"
         ]
       }
     }

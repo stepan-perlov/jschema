@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from copy import deepcopy
-from jschema.errors import JrsNodeError
+from ..errors import JrsNodeError
 
 
 class Node(object):
@@ -19,7 +19,7 @@ class Node(object):
             schema.pop("title", None)
             schema.pop("description", None)
 
-            for key, value in schema.iteritems():
+            for key, value in schema.items():
                 Node.clear(value, key)
         elif value_type == list:
             for i, value in enumerate(schema):
@@ -123,7 +123,7 @@ class Node(object):
             node = item["node"]
             node_value = deepcopy(node.value)
 
-            for key, value in item["origin_value"].iteritems():
+            for key, value in item["origin_value"].items():
                 if key == "$ref":
                     continue
                 node_value[key] = value

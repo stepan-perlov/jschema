@@ -1,7 +1,7 @@
 var jsonSchema = {};
 {% for ns in schemas %}
 jsonSchema["{{ns}}"] = {};
-    {% for method, schema in schemas[ns].iteritems() %}
+    {% for method, schema in schemas[ns].items() %}
 jsonSchema["{{ns}}"]["{{method}}"] = {{schema | jsonDumps}};
     {% endfor %}
 {% endfor %}

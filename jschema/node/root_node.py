@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from jschema.node import Node
+from .node import Node
 
 
 class RootNode(Node):

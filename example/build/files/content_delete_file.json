@@ -1,0 +1,16 @@
+{
+  "type": "method",
+  "params": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      }
+    }
+  },
+  "id": "content.delete_file",
+  "result": {
+    "type": "object",
+    "properties": {}
+  }
+}

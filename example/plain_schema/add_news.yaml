@@ -16,7 +16,7 @@ params:
       type: ["object", "null"]
       $ref: article#
     tags:
-      type: ["array", "null", "text"]
+      type: ["array", "null", "string"]
 
 
 result:

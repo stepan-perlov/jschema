@@ -4,7 +4,7 @@
 {{schema.description}}
 {% endif %}
 
-{% for key, value in schema.iteritems() %}
+{% for key, value in schema.items() %}
     {% if value | type(dict) and value.params %}
 ---
 ### {{value.title or key}}
