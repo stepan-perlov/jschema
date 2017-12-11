@@ -29,6 +29,12 @@ class Schema(object):
     def nodes(self):
         return self._nodes
 
+    def get(self, name):
+        if name not in self._schemas:
+            raise JrsSchemaError("Schema not found: {}".format(name))
+
+        return self._schemas[name]
+
     def load(self, root):
         res = subprocess.check_output(["find", root, "-name", "*.yaml"])
         for fpath in res.split():
