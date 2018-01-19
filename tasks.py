@@ -9,7 +9,7 @@ from version import __version__
 @task
 def pip(ctx):
     ctx.run("rm -rf dist jschema.egg-info")
-    ctx.run("./setup.py sdist")
+    ctx.run("python3 ./setup.py sdist")
     ctx.run("twine upload dist/jschema-{}.tar.gz".format(__version__))
 
 @task
