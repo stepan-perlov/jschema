@@ -13,11 +13,6 @@ def pip(ctx):
     ctx.run("twine upload dist/jschema-{}.tar.gz".format(__version__))
 
 @task
-def doc(ctx):
-    ctx.run("./setup.py build_sphinx")
-    ctx.run("./setup.py upload_sphinx")
-
-@task
 def mezzo(ctx):
     ctx.run("mkdir -p build/jschema")
     ctx.run("cp -R jschema setup.py build/jschema")
