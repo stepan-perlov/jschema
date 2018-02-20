@@ -9,21 +9,21 @@ jschema
 .. code-block:: python
 
     >>> from jschema import Schema
-    >>> schema = Schema("/root/schemas/folder")
+    >>> schema = Schema()
 
     >>> # load all *.yaml file in directory "/root/schemas/folder"
-    >>> schema.load()
+    >>> schema.load("/root/schemas/folder")
     >>> # replace $ref with reference
     >>> schema.resolve_refs()
-
-    >>> # make docs
-    >>> schema.make("docs", "/build/root/docs")
-
     >>> # remove title and description attributes
     >>> schema.clear()
-    >>> # make another format from schemas
-    >>> schema.make("json", "/build/root/json")
-    >>> schema.make("js", "/build/path/to/file.js")
+    >>> # dumps resolved schemas
+    >>> schema.toJson()
+
+.. code-block:: bash
+
+$ jschema --root /root/schemas/folder > result.json
+$ jschema-docs --root /root/schemas/folder --destination /root/docs/folder
 
 Contents:
 

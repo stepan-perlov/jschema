@@ -1,25 +1,91 @@
 import os
+import sys
+import shutil
 import argparse
+import textwrap
 
 from .schema import Schema
+from .errors import JrsError
+from .docs import makeDocs
 
-def parseArguments():
-    parser = argparse.ArgumentParser(prog="jschema")
+def jschema():
+    parser = argparse.ArgumentParser(
+        prog="jschema",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=textwrap.dedent("""\
+                JsonSchema compiler
+            ============================
 
-    parser.add_argument("--src", help="Source directory with schemas (default: %(default)s)", default=str(os.path.abspath(os.getcwd())))
-    parser.add_argument("--dst", help="Destination directory for compiled schemas, destination path for js format", required=True)
-    parser.add_argument("--fmt", choices=["ajv", "js", "json", "golang"],  help="Schema output format", required=True)
-    parser.add_argument("--ns", help="namespace name (default: %(default)s1)", default=None)
+              1. Read yaml files from --root directory
+              2. Resolve $ref in this files
+              3. Remove comments keys
+              4. Write result to stdout in json format
+        """)
+    )
+    parser.add_argument(
+        "-r", "--root",
+        dest="root",
+        default=str(os.path.abspath(os.getcwd())),
+        help="Source directory with schemas (default: %(default)s)"
+    )
+    parser.add_argument(
+        "-p", "--pretty-print",
+        dest="prettyPrint",
+        action="store_true",
+        help="Readable format with indentation"
+    )
+    args = parser.parse_args()
 
-    return parser.parse_args()
-
-def main():
-    args = parseArguments()
     schema = Schema()
-
-    schema.load(args.src)
+    schema.load(args.root)
     schema.resolve_refs()
-    if args.fmt not in ["docs"]:
-        schema.clear()
+    schema.clear()
+    sys.stdout.write(schema.toJson(args.prettyPrint))
 
-    schema.format(args.fmt, {"dst": args.dst, "ns": args.ns})
+def jschemaDocs():
+    parser = argparse.ArgumentParser(
+        prog="jschema-docs",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=textwrap.dedent("""\
+                JsonSchema Docs generator
+            =================================
+
+              1. Read yaml files from --root directory
+              2. Resolve $ref in this files
+              3. Generate documentation to --destination
+        """)
+    )
+    parser.add_argument(
+        "-r", "--root",
+        dest="root",
+        default=str(os.path.abspath(os.getcwd())),
+        help="Source directory with schemas (default: %(default)s)"
+    )
+    parser.add_argument(
+        "-d", "--destination",
+        dest="destination",
+        required=True,
+        help="Output directory for generated documentation"
+    )
+    parser.add_argument(
+        "-f", "--force",
+        dest="force",
+        action="store_true",
+        help="Remove dst directory if exists"
+    )
+    args = parser.parse_args()
+
+    destinationExists = os.path.exists(args.destination)
+    if destinationExists and args.force:
+        shutil.rmtree(args.destination, ignore_errors=True)
+    elif destinationExists:
+        raise JrsError("Destination directory {} exists.\nHINT: Remove directory manyally or add -f (--force) argument".format(
+            args.destination
+        ))
+
+    os.makedirs(args.destination)
+
+    schema = Schema()
+    schema.load(args.root)
+    schema.resolve_refs()
+    makeDocs(schema, args.destination)

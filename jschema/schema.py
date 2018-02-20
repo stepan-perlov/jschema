@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
 import os
 import io
 import subprocess
 
 import yaml
+import json
 
 from .node import RootNode
 from .errors import JrsSchemaError
-from .formats import formats
 
 
 class Schema(object):
@@ -63,8 +62,8 @@ class Schema(object):
         for schema in self._schemas.values():
             RootNode.clear(schema)
 
-    def format(self, fmt, options):
-        if fmt not in formats:
-            raise JrsSchemaError("Unexpected make format '{}'".format(make_format))
+    def toJson(self, prettyPrint=False):
+        if prettyPrint:
+            return json.dumps(self._schemas, separators=(',', ': '), indent=4)
         else:
-            formats[fmt](self, options)
+            return json.dumps(self._schemas, separators=(',', ':'))
