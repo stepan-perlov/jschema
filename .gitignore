@@ -1,4 +1,4 @@
 /build/*
 /dist/*
 /jschema.egg-info
-*.pyc
+__pycache__
