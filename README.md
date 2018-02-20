@@ -7,7 +7,7 @@
 3. Remove comments keys
 4. Write result to stdout in json format
 
-**Usage:**
+**Usage in python3:**
 ```python3
 
     >>> from jschema import Schema
@@ -24,6 +24,7 @@
 
 ```
 
+**Usage in bash:**
 ```bash
 
 $ jschema --root /root/schemas/folder > result.json
