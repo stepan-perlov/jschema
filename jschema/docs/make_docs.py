@@ -25,20 +25,19 @@ def makeDocs(schema, dstDir):
 
     methods = []
     definitions = []
-    for key, item in schema.schemas.items():
+    for item in schemas:
         if item["type"] == "method":
-            methods.append(key)
+            methods.append(item.id)
         elif item["type"] == "definitions":
-            definitions.append(key)
+            definitions.append(item.id)
     indexPath = os.path.join(dstDir, "index.html")
     with open(indexPath, "w") as fstream:
         fstream.write(indexTemplate.render(methods=sorted(methods), definitions=sorted(definitions)))
     print(" - Created: " + indexPath)
 
     schemaTemplate = jinjaEnv.get_template("schema.j2")
-    for key in (methods + definitions):
-        shema = schema.schemas[key]
-        schemaPath = os.path.join(schemasDir, shema["id"] + ".html")
+    for item in schemas:
+        schemaPath = os.path.join(schemasDir, item.id + ".html")
         with open(schemaPath, "w") as fstream:
-            fstream.write(schemaTemplate.render(schema=shema))
+            fstream.write(schemaTemplate.render(schema=item.root.value))
         print(" - Created: " + schemaPath)

@@ -43,3 +43,19 @@ $ jschema --root /root/schemas/folder > result.json
 $ jschema-docs --root /root/schemas/folder --destination /root/docs/folder
 
 ```
+
+## Develop
+
+**Login container:**
+```
+lxc exec jschema-dev -- sudo --login --user ubuntu
+```
+
+**Create container:**
+
+```
+lxc init ubuntu:18.04 jschema-dev
+lxc config set jschema-dev raw.idmap "both $UID 1000"
+lxc config device add jschema-dev project disk source=$PWD path=/home/ubuntu/jschema
+lxc start jschema-dev
+```

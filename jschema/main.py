@@ -4,9 +4,9 @@ import shutil
 import argparse
 import textwrap
 
-from .schema import Schema
-from .errors import JrsError
-from .docs import makeDocs
+from jschema.load_schemas import loadSchemas
+from jschema.errors import JrsError
+from jschema.docs import makeDocs
 
 def jschema():
     parser = argparse.ArgumentParser(
@@ -36,11 +36,12 @@ def jschema():
     )
     args = parser.parse_args()
 
-    schema = Schema()
-    schema.load(args.root)
-    schema.resolve_refs()
-    schema.clear()
-    sys.stdout.write(schema.toJson(args.prettyPrint))
+    schemas = loadSchemas(args.root)
+    schemas.initNodes()
+    schemas.resolveRefs()
+    schemas.clear()
+
+    sys.stdout.write(schemas.toJson(args.prettyPrint))
 
 def jschemaDocs():
     parser = argparse.ArgumentParser(
@@ -85,7 +86,7 @@ def jschemaDocs():
 
     os.makedirs(args.destination)
 
-    schema = Schema()
-    schema.load(args.root)
-    schema.resolve_refs()
-    makeDocs(schema, args.destination)
+    schemas = loadSchemas(args.root)
+    schemas.initNodes()
+    schemas.resolveRefs()
+    makeDocs(schemas, args.destination)

@@ -1,4 +1,5 @@
 id: types
+type: definitions
 
 date:
   type: ["string", "null"]
