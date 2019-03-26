@@ -38,7 +38,7 @@ jschema --root tests/sources/multirefs --prettyPrint > multirefs.json
 **Usage:**
 ```bash
 
-jschema-docs --root /root/schemas/folder --destination /root/docs/folder
+jschema-docs --root tests/sources/multirefs --destination tests/build
 
 ```
 
