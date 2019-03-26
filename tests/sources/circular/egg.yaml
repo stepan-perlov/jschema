@@ -1,0 +1,8 @@
+id: egg
+type: definitions
+
+struct:
+  name:
+    type: string
+  source:
+    $ref: chicken#struct

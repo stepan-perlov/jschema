@@ -1,5 +1,6 @@
 id: types
 type: definitions
+description: Описание для проверки работы utf-8
 
 date:
   type: ["string", "null"]

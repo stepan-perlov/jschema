@@ -1,0 +1,8 @@
+id: users_list
+type: definitions
+description: Users list
+
+struct:
+  type: array
+  items:
+    $ref: user#struct

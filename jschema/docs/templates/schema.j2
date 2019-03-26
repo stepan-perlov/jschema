@@ -24,9 +24,9 @@
 <pre><code class="json">{{schema.result | jsonPrettyDump}}</code></pre>
 {% endif %}
 
-{% if schema.definitions %}
-<h2>Definitions</h2>
-<pre><code class="json">{{schema.definitions | jsonPrettyDump}}</code></pre>
+{% if schema | omitKeys(["id", "description", "params", "result"]) %}
+<h2>Structs</h2>
+<pre><code class="json">{{schema | omitKeys(["id", "description", "params", "result"]) | jsonPrettyDump}}</code></pre>
 {% endif %}
 
 {% endblock %}

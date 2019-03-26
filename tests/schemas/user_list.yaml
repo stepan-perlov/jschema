@@ -1,8 +1,0 @@
-id: user_list
-type: definitions
-
-type: array
-items:
-  type: object
-  properties:
-    $ref: user#/properties

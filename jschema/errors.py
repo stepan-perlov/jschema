@@ -4,36 +4,21 @@ import json
 class JrsError(Exception):
     pass
 
-
-class JrsRefNotFound(JrsError):
-    pass
-
-
 class JrsSchemaError(JrsError):
     pass
 
-
-class JrsNodeError(JrsError):
-    @staticmethod
-    def make_message(message, node):
-        return "{}. node: {}, schema_id: {}".format(
-            message,
-            json.dumps(node.parent.value, indent=2, separators=(',', ': ')),
-            node.rootNode.key
-        )
-
-class JrsFormatingError(JrsError):
+class JrsSchemaNotFound(JrsError):
     pass
 
-class JrsNoSchemaWithoutRefs(JrsError):
+class JrsNodeNotFound(JrsError):
     pass
 
 class JrsCircularRefs(JrsError):
     @staticmethod
-    def make_message(relatedRefs, fromRefs):
+    def make_message(refs):
         return "Circular references: {}".format(
             " -> ".join([
-                "{}#{}".format(ref.rootId, ref.path)
-                for ref in reversed(fromRefs)
+                "{}#{}".format(ref.schemaId, ref.path)
+                for ref in reversed(refs)
             ])
         )

@@ -1,7 +1,3 @@
-from copy import deepcopy
-
-from .refs_resolver import Ref
-from .refs_resolver import RefsResolver
 
 
 class NodeChilds(object):
@@ -17,9 +13,11 @@ class NodeChilds(object):
         elif self.isObject:
             self.node[child.key] = child
 
+
 class Node(object):
 
-    def __init__(self, key, value, parent):
+    def __init__(self, ctx, key, value, parent):
+        self.ctx = ctx
         self.key = key
         self.value = value
         self.parent = parent
@@ -36,19 +34,10 @@ class Node(object):
 
         self.childs = []
 
-    def find(self, path):
-        if self.path == path:
-            return self
+        if parent:
+            ctx.addNode(self.root.key, self.path, self)
 
-        if self.childs:
-            for child in self.childs:
-                node = child.find(path)
-                if node is not None:
-                    return node
-        else:
-            return None
-
-    def initNodes(self):
+    def initNodes(self, clear=True):
         valueType = type(self.value)
         isDict = valueType is dict
         isList = valueType is list
@@ -56,28 +45,31 @@ class Node(object):
         if isDict and "$ref" in self.value:
             self._resolveRef()
         elif isDict:
-            self._resolveDict()
+            self._resolveDict(clear)
         elif isList:
-            self._resolveList()
+            self._resolveList(clear)
 
     def _resolveRef(self):
-        print(self.value)
         if self.value["$ref"].index("#") == 0:
             schemaId, path = self.root.key, self.value["$ref"][1:]
         else:
             schemaId, path = self.value["$ref"].split("#")
 
         path = path.lstrip("/")
-        RefsResolver.addRef(Ref(schemaId, path, self))
+        ref = self.ctx.refsResolver.Ref(schemaId, path, self)
+        self.ctx.refsResolver.addRef(ref)
 
-    def _resolveDict(self):
+    def _resolveDict(self, clear):
+        if clear:
+            self.value.pop("description", None)
+
         for key, value in self.value.items():
-            child = Node(key, value, parent=self)
-            child.initNodes()
+            child = Node(self.ctx, key, value, parent=self)
+            child.initNodes(clear)
             self.childs.append(child)
 
-    def _resolveList(self):
+    def _resolveList(self, clear):
         for num, value in enumerate(self.value):
-            child = Node(num, value, parent=self)
-            child.initNodes()
+            child = Node(self.ctx, num, value, parent=self)
+            child.initNodes(clear)
             self.childs.append(child)

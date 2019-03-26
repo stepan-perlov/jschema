@@ -1,0 +1,11 @@
+id: user
+type: definitions
+description: User
+
+struct:
+  type: object
+  properties:
+    name:
+      type: string
+    vacation:
+      $ref: typesMistake#date_range

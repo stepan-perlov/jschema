@@ -29,19 +29,18 @@ def jschema():
         help="Source directory with schemas (default: %(default)s)"
     )
     parser.add_argument(
-        "-p", "--pretty-print",
+        "-p", "--prettyPrint",
         dest="prettyPrint",
         action="store_true",
         help="Readable format with indentation"
     )
     args = parser.parse_args()
 
-    schemas = loadSchemas(args.root)
-    schemas.initNodes()
-    schemas.resolveRefs()
-    schemas.clear()
+    ctx = loadSchemas(args.root)
+    ctx.initNodes(clear=True)
+    ctx.resolveRefs()
 
-    sys.stdout.write(schemas.toJson(args.prettyPrint))
+    sys.stdout.write(ctx.toJson(args.prettyPrint))
 
 def jschemaDocs():
     parser = argparse.ArgumentParser(
@@ -86,7 +85,7 @@ def jschemaDocs():
 
     os.makedirs(args.destination)
 
-    schemas = loadSchemas(args.root)
-    schemas.initNodes()
-    schemas.resolveRefs()
-    makeDocs(schemas, args.destination)
+    ctx = loadSchemas(args.root)
+    ctx.initNodes(clear=False)
+    ctx.resolveRefs()
+    makeDocs(ctx, args.destination)

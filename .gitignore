@@ -1,4 +1,5 @@
 /build/*
 /dist/*
 /jschema.egg-info
+/tests/build/*
 __pycache__

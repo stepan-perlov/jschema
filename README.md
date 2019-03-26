@@ -1,5 +1,9 @@
 # jschema
 
+Library for compiling json-schemas specifications with $refs from yaml to json with resolved $refs.
+Expected json-schemas with unique field id, and type in method, definitions
+
+
 ## Json Schema compiler
 
 1. Read yaml files from --root directory
@@ -8,28 +12,22 @@
 4. Write result to stdout in json format
 
 **Usage in python3:**
+
 ```python3
-
-    >>> from jschema import Schema
-    >>> schema = Schema()
-
-    >>> # load all *.yaml file in directory "/root/schemas/folder"
-    >>> schema.load("/root/schemas/folder")
-    >>> # replace $ref with reference
-    >>> schema.resolve_refs()
-    >>> # remove title and description attributes
-    >>> schema.clear()
-    >>> # dumps resolved schemas
-    >>> schema.toJson()
-
+from jschema import loadSchemas
+ctx = loadSchemas("tests/sources/multirefs")
+ctx.initNodes(clear=True)
+ctx.resolveRefs()
+ctx.toJson(prettyPrint=True)
 ```
+
 
 **Usage in bash:**
+
 ```bash
-
-$ jschema --root /root/schemas/folder > result.json
-
+jschema --root tests/sources/multirefs --prettyPrint > multirefs.json
 ```
+
 
 ## JsonSchema Docs generator
 
@@ -40,13 +38,15 @@ $ jschema --root /root/schemas/folder > result.json
 **Usage:**
 ```bash
 
-$ jschema-docs --root /root/schemas/folder --destination /root/docs/folder
+jschema-docs --root /root/schemas/folder --destination /root/docs/folder
 
 ```
+
 
 ## Develop
 
 **Login container:**
+
 ```
 lxc exec jschema-dev -- sudo --login --user ubuntu
 ```

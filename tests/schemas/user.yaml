@@ -1,9 +1,0 @@
-id: user
-type: definitions
-
-type: object
-properties:
-  name:
-    type: string
-  vacation:
-    $ref: types#/date_range

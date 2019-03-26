@@ -1,9 +1,10 @@
 from copy import deepcopy
 
-from jschema.errors import JrsNodeError
-from jschema.errors import JrsRefNotFound
-from jschema.errors import JrsNoSchemaWithoutRefs
+from jschema.errors import JrsSchemaNotFound
 from jschema.errors import JrsCircularRefs
+
+from .nodes_cache import NodesCache
+
 
 class RefsGroup(object):
 
@@ -38,11 +39,13 @@ class Ref(object):
         self.refNode = None
         self.resolved = False
 
-
 class RefsResolver(object):
-    _schemas = {}
-    _targets = RefsGroup("targets")
-    _refs = []
+
+    @classmethod
+    def init(cls):
+        cls._schemas = {}
+        cls._targets = RefsGroup("targets")
+        cls._refs = []
 
     @classmethod
     def addSchema(cls, schema):
@@ -51,7 +54,7 @@ class RefsResolver(object):
     @classmethod
     def addRef(cls, ref):
         if ref.schemaId not in cls._schemas:
-            raise JrsNodeError(JrsNodeError.make_message("Schema '{}' not exists".format(ref.schemaId), ref.target))
+            raise JrsSchemaNotFound("Schema not found, schemaId: {}".format(ref.schemaId))
 
         cls._targets.add(
             schemaId=ref.target.root.key,
@@ -65,10 +68,7 @@ class RefsResolver(object):
         if ref.resolved:
             return
 
-        if ref.refNode is None:
-            ref.refNode = cls._schemas[ref.schemaId].root.find(ref.path)
-            if ref.refNode is None:
-                raise JrsRefNotFound("Ref not found, schemaId: {}, path: {}".format(ref.schemaId, ref.path))
+        ref.refNode = NodesCache.get(ref.schemaId, ref.path)
 
         relatedRef = None
         for path in cls._targets.getPathes(ref.schemaId):
@@ -77,22 +77,13 @@ class RefsResolver(object):
                 break;
 
         if relatedRef in fromRefs:
-            raise JrsCircularRefsException("")
-
-        if relatedRef is None:
-            ref.target.parent.value[ref.target.key] = ref.refNode.value
-            ref.resolved = True
-        elif relatedRef in fromRefs:
             raise JrsCircularRefs(JrsCircularRefs.make_message([relatedRef, ref] + fromRefs))
-        else:
-            if relatedRef.refNode is None:
-                relatedRef.refNode = cls._schemas[relatedRef.schemaId].root.find(relatedRef.path)
-                if relatedRef.refNode is None:
-                    raise JrsRefNotFound("Ref not found, schemaId: {}, path: {}".format(relatedRef.schemaId, relatedRef.path))
 
+        if relatedRef is not None:
             cls._resolveRefs(relatedRef, [ref] + fromRefs)
-            ref.target.parent.value[ref.target.key] = ref.refNode.value
-            ref.resolved = True
+
+        ref.target.parent.value[ref.target.key] = ref.refNode.value
+        ref.resolved = True
 
     @classmethod
     def resolveRefs(cls):

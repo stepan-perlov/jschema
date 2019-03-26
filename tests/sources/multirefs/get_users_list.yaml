@@ -1,0 +1,12 @@
+id: get_users_list
+type: method
+description: Get user list
+
+params:
+  start_time:
+    $ref: types#date
+  end_time:
+    $ref: types#date
+
+result:
+  $ref: users_list#struct
