@@ -26,7 +26,6 @@ class RefsResolver(object):
         if ref.schemaId not in self.ctx.schemas:
             raise JrsSchemaNotFound("Schema not found, schemaId: {}".format(ref.schemaId))
 
-        print(ref.target.root.key, ref.target.path)
         self.targets.add(
             schemaId=ref.target.root.key,
             path=ref.target.path,
