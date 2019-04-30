@@ -15,7 +15,12 @@ setup(
     author_email="stepanperlov@gmail.com",
     url="https://github.com/stepan-perlov/jschema",
     install_requires=["PyYAML", "jinja2"],
-    packages=["jschema", "jschema.docs", "jschema.schema"],
+    packages=[
+        "jschema",
+        "jschema.docs",
+        "jschema.refs_resolver",
+        "jschema.schema"
+    ],
     package_data={
         "jschema.docs": [
             "templates/*.j2",
