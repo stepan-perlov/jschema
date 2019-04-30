@@ -14,6 +14,9 @@ class RefsGroup(object):
         self._group[schemaId][path] = ref
 
     def getPathes(self, schemaId):
+        if schemaId not in self._group:
+            return []
+
         if schemaId not in self._cachedPathes:
             self._cachedPathes[schemaId] = reversed(sorted(
                 self._group[schemaId].keys()

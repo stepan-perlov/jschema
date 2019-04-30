@@ -18,7 +18,7 @@ class Context(object):
         self.nodes["{}#{}".format(schemaId, path)] = node
 
     def getNode(self, schemaId, path):
-        fullPath = "{}#{}".format(schemaId, path)
+        fullPath = "{}#{}".format(schemaId, path.replace("/", "."))
         if fullPath not in self.nodes:
             raise JrsNodeNotFound("Not found node with schemaId: {}, path: {}".format(schemaId, path))
 
