@@ -24,9 +24,9 @@ class Context(object):
 
         return self.nodes[fullPath]
 
-    def initNodes(self, clear=True):
+    def initNodes(self):
         for schema in self.schemas.values():
-            schema.root.initNodes(clear)
+            schema.root.initNodes()
 
     def resolveRefs(self):
         self.refsResolver.resolveRefs()

@@ -37,7 +37,7 @@ class Node(object):
         if parent:
             ctx.addNode(self.root.key, self.path, self)
 
-    def initNodes(self, clear=True):
+    def initNodes(self):
         valueType = type(self.value)
         isDict = valueType is dict
         isList = valueType is list
@@ -45,9 +45,9 @@ class Node(object):
         if isDict and "$ref" in self.value:
             self._resolveRef()
         elif isDict:
-            self._resolveDict(clear)
+            self._resolveDict()
         elif isList:
-            self._resolveList(clear)
+            self._resolveList()
 
     def _resolveRef(self):
         if self.value["$ref"].index("#") == 0:
@@ -59,17 +59,14 @@ class Node(object):
         ref = self.ctx.refsResolver.Ref(schemaId, path, self)
         self.ctx.refsResolver.addRef(ref)
 
-    def _resolveDict(self, clear):
-        if clear:
-            self.value.pop("description", None)
-
+    def _resolveDict(self):
         for key, value in self.value.items():
             child = Node(self.ctx, key, value, parent=self)
-            child.initNodes(clear)
+            child.initNodes()
             self.childs.append(child)
 
-    def _resolveList(self, clear):
+    def _resolveList(self):
         for num, value in enumerate(self.value):
             child = Node(self.ctx, num, value, parent=self)
-            child.initNodes(clear)
+            child.initNodes()
             self.childs.append(child)

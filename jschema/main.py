@@ -18,8 +18,7 @@ def jschema():
 
               1. Read yaml files from --root directory
               2. Resolve $ref in this files
-              3. Remove comments keys
-              4. Write result to stdout in json format
+              3. Write result to stdout in json format
         """)
     )
     parser.add_argument(
@@ -37,7 +36,7 @@ def jschema():
     args = parser.parse_args()
 
     ctx = loadSchemas(args.root)
-    ctx.initNodes(clear=True)
+    ctx.initNodes()
     ctx.resolveRefs()
 
     sys.stdout.write(ctx.toJson(args.prettyPrint))
