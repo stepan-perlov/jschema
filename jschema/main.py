@@ -85,6 +85,6 @@ def jschemaDocs():
     os.makedirs(args.destination)
 
     ctx = loadSchemas(args.root)
-    ctx.initNodes(clear=False)
+    ctx.initNodes()
     ctx.resolveRefs()
     makeDocs(ctx, args.destination)
